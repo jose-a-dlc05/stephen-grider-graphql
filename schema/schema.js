@@ -1,5 +1,5 @@
 const graphql = require('graphql');
-const _ = require('lodash');
+const axios = require('axios');
 const {
 	GraphQLObjectType,
 	GraphQLID,
@@ -7,11 +7,6 @@ const {
 	GraphQLInt,
 	GraphQLSchema,
 } = graphql;
-
-const users = [
-	{ id: '23', firstName: 'Bill', age: 20 },
-	{ id: '47', firstName: 'Samantha', age: 21 },
-];
 
 const UserType = new GraphQLObjectType({
 	name: 'User',
@@ -31,7 +26,9 @@ const RootQuery = new GraphQLObjectType({
 			args: { id: { type: GraphQLID } },
 			// This sets up the arguments that the user query accepts. In this case, it takes an id of type GraphQLID. This is used to fetch a specific user by their ID.
 			resolve(parentValue, args) {
-				return _.find(users, { id: args.id });
+				return axios
+					.get(`http://localhost:3000/users/${args.id}`)
+					.then((response) => response.data);
 				// The resolve function is where the actual data fetching logic is written. It's responsible for returning the data for the field. In this example, the function body is empty, meaning it needs to be implemented to fetch the actual user data based on the provided id.
 			},
 		},
