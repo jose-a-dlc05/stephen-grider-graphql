@@ -1,5 +1,6 @@
 const express = require('express');
 const expressGraphQL = require('express-graphql').graphqlHTTP;
+const schema = require('./schema/schema');
 // This module is a middleware for Express that allows you to add a GraphQL API server to your Express application. The .graphqlHTTP part is a function provided by express-graphql which will be used to handle GraphQL requests.
 const PORT = 4000;
 
@@ -9,6 +10,7 @@ const app = express();
 app.use(
 	'/graphql',
 	expressGraphQL({
+		schema,
 		graphiql: true,
 	})
 );
